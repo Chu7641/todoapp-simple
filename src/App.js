@@ -1,23 +1,44 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import TodoForm from './component/TodoForm';
+import TodoList from './component/TodoList';
 
 function App() {
+
+  const [todoList,setTodoList]=useState([
+    {id: 1, title: "Làm bài tập về nhà!"},
+    {id: 2, title: "Học html css!"},
+    {id: 3, title: "Học js, reactjs!"}  
+  ]);
+
+  const handleTodoClick=(todo)=>{
+    const index=todoList.findIndex(x=>x.id===todo.id)
+    if(index<0)return;
+    const newTodoList=[...todoList];
+    newTodoList.splice(index,1);
+    setTodoList(newTodoList);
+  }
+
+  const handleSubmit=(inputText)=>{
+      const newTodo={
+        id: todoList.length+1 ,
+        title: inputText
+      };
+      const newTodoList=[...todoList];
+      newTodoList.push(newTodo);
+      setTodoList(newTodoList);
+
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <h1>Todo list</h1>
+        <TodoForm onSubmit={handleSubmit}/>
+        <TodoList 
+            todos={todoList}
+            onTodoClick={handleTodoClick}
+
+        />
     </div>
   );
 }
